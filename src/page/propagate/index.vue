@@ -5,15 +5,19 @@
 </template>
 
 <script>
-
 export default {
 	name: 'propagate',
-  	components: {
-   		
-  	},
-  	created(){
-      
-  	}
+  	data(){
+        return {
+           
+        }
+    },
+	mounted(){
+        
+    },
+    methods:{
+
+    }
 }
 
 </script>
