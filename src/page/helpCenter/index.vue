@@ -1,17 +1,17 @@
 <template>
-  	<div class="list-container">
-        <div class="list-main" v-if="state == 'list'">
+  	<div class="help-container">
+    	<div class="list-main" v-if="state == 'list'">
+            <div class="list-header">常见问题列表</div>
             <ul>
                 <li v-for="item in listData" :key="item.id" @click="goDetail(item.id)">
-                    <div>{{item.year}}年{{item.month}}月</div>
-                    <div>{{item.salaryType}}</div>
-                    <div>查看详情</div>
+                    <div>{{item.title}}</div>
                 </li>
+                <li class="ul-footer">联系客服 : 027-8788 8662</li>
             </ul>
         </div>
         <div class="detail-main" v-if="state == 'detail'">
             <div class="detail-header">
-                <div class="show-list" @click="state = 'list'">历史</div>
+                <div class="show-list" @click="state = 'list'">返回</div>
             </div>
             <div v-html="detailData.content || ''"></div>
         </div>
@@ -21,37 +21,42 @@
 <script>
 import { Toast } from 'mint-ui'
 export default {
-	name: 'billList',
-  	data(){
+	name: 'helpCenter',
+    data(){
         return {
             state:"list",
-            listData: [],
+            listData:[],
             detailData: {}
-        //    listData : [{
-        //        id:98556,
-        //        year:'2019',
-        //        month:'04',
-        //        salaryType:"薪资"
-        //    },{
-        //        id:727572,
-        //        year:'2019',
-        //        month:'05',
-        //        salaryType:"薪资"
-        //    },{
-        //        id:42545,
-        //        year:'2019',
-        //        month:'06',
-        //        salaryType:"薪资"
-        //    }]
         }
     },
 	mounted(){
-        this.listData = this.$route.query.resultData.reverse();
-        console.log(this.listData)
+        this.getHelpList()
     },
     methods:{
+        getHelpList(){
+            this.$ajax("POST","v1/HelpCenter/pager",{
+                pageNum: 1,
+                pageSize: 10,
+                paramData: {}
+            }).then(res => {
+                if(res.data){
+                    this.listData = res.data.resultData
+                    console.log(this.listData)
+                }else{
+                    Toast({
+                        message: '请求失败：' + res.message,
+                        duration: 3000
+                    });
+                }
+            },err => {
+                Toast({
+                    message: JSON.parse(err.response).message || '获取信息失败，请稍后重试',
+                    duration: 3000
+                });
+            })
+        },
         goDetail(id){
-            this.$ajax("GET","v1/sendrecord/staff/"+id).then(res => {
+            this.$ajax("GET","v1/HelpCenter/"+id).then(res => {
                 if(res.data){
                     this.state = 'detail'
                     this.detailData = res.data
@@ -70,11 +75,10 @@ export default {
         }
     }
 }
-
 </script>
 
 <style lang="less" scoped>
-.list-container{
+.help-container{
     position: absolute;
     top:0;
     left:0;
@@ -85,25 +89,24 @@ export default {
     flex-direction:column;
     .list-main{
         flex:1;
+        padding:10%;
+        .list-header{
+            height:56px;
+            line-height:56px;
+            font-size:1.2rem;
+        }
         ul{
-            width:80%;
-            height:100%;
-            margin:0 auto;
-            padding-top:25%;
             li{
-                height:56px;
-                line-height:56px;
-                color:#999;
-                border-radius:10px;
-                background:#fff;
-                padding:0 15px;
-                cursor:pointer;
-                margin-bottom:20px;
-                display:flex;
-                justify-content: space-between;
-                div:first-child{
-                    margin-right:15px;
-                }
+                line-height:36px;
+                font-size:0.8rem;
+                border-bottom:0.01rem solid #ddd;
+                margin-bottom:10px;
+            }
+            .ul-footer{
+                padding-top:10px;
+                text-align:center;
+                color:#555;
+                border-bottom:none;
             }
         }
     }
