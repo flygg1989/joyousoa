@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import { Toast } from 'mint-ui'
 export default {
     name: 'home',
     data(){
@@ -114,29 +115,77 @@ export default {
         //获取验证码
         getSms(state){
             if(state == 'mobile' && this.mobileSmsText == '获取验证码'){
-                this.mobileSmsTime = 60
-                var mobileTimer = setInterval(() => {
-                    this.mobileSmsTime--
-                    if (this.mobileSmsTime > 0) {
-                        this.mobileSmsText = "(" + this.mobileSmsTime + "s)后重试"
-                        }else{
+                if(this.mobile && !this.messageMobile){
+                    this.mobileSmsTime = 60
+                    var mobileTimer = setInterval(() => {
+                        this.mobileSmsTime--
+                        if (this.mobileSmsTime > 0) {
+                            this.mobileSmsText = "(" + this.mobileSmsTime + "s)后重试"
+                            }else{
+                                this.mobileSmsText = '获取验证码'
+                                clearInterval(mobileTimer)
+                        }
+                    }, 1000)
+                    this.$ajax("GET","v1/sms/sendSMS/"+this.mobile).then(res => {
+                        if(!res.data){
+                            Toast({
+                                message: res.message,
+                                duration: 3000
+                            });
+                            this.mobileSmsTime = 0
                             this.mobileSmsText = '获取验证码'
-                            clearInterval(mobileTimer)
-                    }
-                }, 1000)
+                        }
+                    },err => {
+                        Toast({
+                            message: JSON.parse(err.response).message ||  '验证码获取失败，请稍后重试',
+                            duration: 3000
+                        });
+                        this.mobileSmsTime = 0
+                        this.mobileSmsText = '获取验证码'
+                    })
+                }else{
+                    Toast({
+                        message: '请输入正确的手机号',
+                        duration: 3000
+                    });
+                }
             }else if(state == 'mobile'){
                 console.log("手机验证码发送过频繁")
             }else if(state == 'email' && this.emailSmsText == '获取验证码'){
-                this.emailSmsTime = 60
-                var emailTimer = setInterval(() => {
-                    this.emailSmsTime--
-                    if (this.emailSmsTime > 0) {
-                        this.emailSmsText = "(" + this.emailSmsTime + "s)后重试"
-                        }else{
+                if(this.email && !this.messageEmail){
+                    this.emailSmsTime = 60
+                    var emailTimer = setInterval(() => {
+                        this.emailSmsTime--
+                        if (this.emailSmsTime > 0) {
+                            this.emailSmsText = "(" + this.emailSmsTime + "s)后重试"
+                            }else{
+                                this.emailSmsText = '获取验证码'
+                                clearInterval(emailTimer)
+                        }
+                    }, 1000)
+                    this.$ajax("GET","v1/sms/sendMail/"+this.email).then(res => {
+                        if(!res.data){
+                            Toast({
+                                message: res.message,
+                                duration: 3000
+                            });
+                            this.emailSmsTime = 0
                             this.emailSmsText = '获取验证码'
-                            clearInterval(emailTimer)
-                    }
-                }, 1000)
+                        }
+                    },err => {
+                        Toast({
+                            message: JSON.parse(err.response).message ||  '验证码获取失败，请稍后重试',
+                            duration: 3000
+                        });
+                        this.emailSmsTime = 0
+                        this.emailSmsText = '获取验证码'
+                    })
+                }else{
+                    Toast({
+                        message: '请输入正确的邮箱',
+                        duration: 3000
+                    });
+                }
             }else if(state == 'email'){
                 console.log("邮箱验证码发送过频繁")
             }
@@ -145,14 +194,69 @@ export default {
         doSubmit(){
             if(this.sms && !this.messageSms){
                 if(this.active && this.mobile && !this.messageMobile){
-                    
+                    this.$ajax("POST","v1/sendrecord/staff/pager",{
+                        pageNum: 1,
+                        pageSize: 5,
+                        paramData: {
+                            code: this.sms,
+                            mobile: this.mobile
+                        }
+                    }).then(res => {
+                        if(res.data){
+                            // console.log(res.data.resultData)
+                            this.$router.push({
+                              path: "/billList",
+                              query: res.data
+                            });
+                        }else{
+                            Toast({
+                                message: '请求失败：' + res.message,
+                                duration: 3000
+                            });
+                        }
+                    },err => {
+                        Toast({
+                            message: JSON.parse(err.response).message || '获取信息失败，请稍后重试',
+                            duration: 3000
+                        });
+                    })
                 }else if(!this.active && this.email && !this.messageEmail){
-                    
+                    this.$ajax("POST","v1/sendrecord/staff/pager",{
+                        pageNum: 1,
+                        pageSize: 5,
+                        paramData: {
+                            code: this.sms,
+                            email: this.email
+                        }
+                    }).then(res => {
+                        if(res.data){
+                            this.$router.push({
+                              path: "/billList",
+                              query: res.data
+                            });
+                        }else{
+                            Toast({
+                                message: '请求失败：' + res.message,
+                                duration: 3000
+                            });
+                        }
+                    },err => {
+                        Toast({
+                            message: JSON.parse(err.response).message || '获取信息失败，请稍后重试',
+                            duration: 3000
+                        });
+                    })
                 }else{
-                    console.log("请正确填写个人信息")
+                    Toast({
+                        message: '请正确填写个人信息',
+                        duration: 3000
+                    });
                 }
             }else{
-                console.log("验证码输入错误")
+                Toast({
+                    message: '验证码输入错误',
+                    duration: 3000
+                });
             }
         }
     }

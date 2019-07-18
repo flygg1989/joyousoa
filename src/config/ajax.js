@@ -1,3 +1,5 @@
+import domain from '../domain'
+
 export default (type='GET', url='', data={}, async=true) => {
 	return new Promise((resolve, reject) => { //定义一个promise
 		type = type.toUpperCase();
@@ -15,11 +17,13 @@ export default (type='GET', url='', data={}, async=true) => {
 				dataStr += key + '=' + data[key] + '&';
 			})
 			dataStr = dataStr.substr(0, dataStr.lastIndexOf('&'));
-			url = url + '?' + dataStr;
+			url = dataStr?url + '?' + dataStr:url;
+			url = domain.testUrl + url
 			requestObj.open(type, url, async);
 			requestObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			requestObj.send();
 		}else if (type == 'POST') {
+			url = domain.testUrl + url
 			requestObj.open(type, url, async);
 			requestObj.setRequestHeader("Content-type", "application/json");
 			requestObj.send(JSON.stringify(data));
