@@ -20,7 +20,7 @@ export default [{
     }, {//商务合作
         path: '/cooperate',
         component: r => require.ensure([], () => r(require('../page/cooperate')), 'cooperate')
-    }, {//使用帮助
+    }, {//帮助中心
         path: '/helpCenter',
         component: r => require.ensure([], () => r(require('../page/helpCenter')), 'helpCenter')
     }]
