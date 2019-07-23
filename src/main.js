@@ -7,8 +7,12 @@ import './style/common'
 
 import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
-
 Vue.use(MintUI)
+
+import VueAwesomeSwiper from 'vue-awesome-swiper';
+import 'swiper/dist/css/swiper.css';
+Vue.use(VueAwesomeSwiper);
+
 Vue.use(VueRouter)
 const router = new VueRouter({
 	routes

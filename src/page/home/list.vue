@@ -27,27 +27,12 @@ export default {
             state:"list",
             listData: [],
             detailData: {}
-        //    listData : [{
-        //        id:98556,
-        //        year:'2019',
-        //        month:'04',
-        //        salaryType:"薪资"
-        //    },{
-        //        id:727572,
-        //        year:'2019',
-        //        month:'05',
-        //        salaryType:"薪资"
-        //    },{
-        //        id:42545,
-        //        year:'2019',
-        //        month:'06',
-        //        salaryType:"薪资"
-        //    }]
         }
     },
 	mounted(){
-        this.listData = this.$route.query.resultData.reverse();
-        console.log(this.listData)
+        console.log(this.$route.query)
+        // this.listData = this.$route.query.resultData.reverse();
+        // console.log(this.listData)
     },
     methods:{
         goDetail(id){
@@ -67,6 +52,24 @@ export default {
                     duration: 3000
                 });
             })
+            //无标签样式接口
+            // this.$ajax("GET","v1/sendrecord/"+id).then(res => {
+            //     if(res.data){
+            //         this.state = 'detail'
+            //         this.detailData = JSON.parse(res.data.content)
+            //         console.log(this.detailData)
+            //     }else{
+            //         Toast({
+            //             message: res.message,
+            //             duration: 3000
+            //         });
+            //     }
+            // },err => {
+            //     Toast({
+            //         message: JSON.parse(err.response).message ||  '获取工资条失败，请稍后重试',
+            //         duration: 3000
+            //     });
+            // })
         }
     }
 }
@@ -83,6 +86,7 @@ export default {
     background:#f3f3f3;
     display:flex;
     flex-direction:column;
+    overflow: hidden;
     .list-main{
         flex:1;
         ul{

@@ -1,7 +1,7 @@
 <template>
   	<div class="help-container">
+        <div class="title">常见问题列表</div>
     	<div class="list-main" v-if="state == 'list'">
-            <div class="list-header">常见问题列表</div>
             <ul>
                 <li v-for="item in listData" :key="item.id" @click="goDetail(item.id)">
                     <div>{{item.title}}</div>
@@ -87,14 +87,18 @@ export default {
     background:#f3f3f3;
     display:flex;
     flex-direction:column;
+    overflow: hidden;
+    .title{
+        text-align: center;
+        line-height:5rem;
+        font-size:1.3rem;
+        background: #3bc492;
+        color: #fff;
+        margin-bottom:10px;
+    }
     .list-main{
         flex:1;
         padding:10%;
-        .list-header{
-            height:56px;
-            line-height:56px;
-            font-size:1.2rem;
-        }
         ul{
             li{
                 line-height:36px;

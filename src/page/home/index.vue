@@ -194,19 +194,15 @@ export default {
         doSubmit(){
             if(this.sms && !this.messageSms){
                 if(this.active && this.mobile && !this.messageMobile){
-                    this.$ajax("POST","v1/sendrecord/staff/pager",{
-                        pageNum: 1,
-                        pageSize: 5,
-                        paramData: {
-                            code: this.sms,
-                            mobile: this.mobile
-                        }
+                    this.$ajax("POST","v1/sendrecord/staff/login",{
+                        code: this.sms,
+                        mobile: this.mobile
                     }).then(res => {
                         if(res.data){
                             // console.log(res.data.resultData)
                             this.$router.push({
                               path: "/billList",
-                              query: res.data
+                              query: {mobile: this.mobile}
                             });
                         }else{
                             Toast({
@@ -221,18 +217,14 @@ export default {
                         });
                     })
                 }else if(!this.active && this.email && !this.messageEmail){
-                    this.$ajax("POST","v1/sendrecord/staff/pager",{
-                        pageNum: 1,
-                        pageSize: 5,
-                        paramData: {
-                            code: this.sms,
-                            email: this.email
-                        }
+                    this.$ajax("POST","v1/sendrecord/staff/login",{
+                        code: this.sms,
+                        email: this.email
                     }).then(res => {
                         if(res.data){
                             this.$router.push({
                               path: "/billList",
-                              query: res.data
+                              query: {email: this.email}
                             });
                         }else{
                             Toast({
@@ -296,6 +288,7 @@ export default {
         }
         .title{
             height:32px;
+            margin:0 10px;
             line-height:32px;
             font-size:0.5rem;
         }
