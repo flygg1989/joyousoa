@@ -17,8 +17,11 @@ export default (type='GET', url='', data={}, async=true) => {
 				dataStr += key + '=' + data[key] + '&';
 			})
 			dataStr = dataStr.substr(0, dataStr.lastIndexOf('&'));
-			url = dataStr?url + '?' + dataStr:url;
-			url = domain.testUrl + url
+			if(url != 'http://192.168.0.110:6010/v1/wx/user'){
+
+				url = dataStr?url + '?' + dataStr:url;
+				url = domain.testUrl + url
+			}
 			requestObj.open(type, url, async);
 			requestObj.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 			requestObj.send();

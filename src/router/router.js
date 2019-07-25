@@ -11,6 +11,10 @@ export default [{
         //我的工资条列表
         path: '/billList',
         component: r => require.ensure([], () => r(require('../page/home/list')), 'billList')
+    }, {
+        //我的工资条详情
+        path: '/billdetails',
+        component: r => require.ensure([], () => r(require('../page/home/details')), 'billdetails')
     }, {//宣传页面
         path: '/propagate',
         component: r => require.ensure([], () => r(require('../page/propagate')), 'propagate')

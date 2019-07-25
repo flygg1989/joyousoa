@@ -1,7 +1,7 @@
 <template>
   	<div class="help-container">
-        <div class="title">常见问题列表</div>
-    	<div class="list-main" v-if="state == 'list'">
+    	<div :class="{listmain:true,isactive:state == 'list'}">
+            <div class="title">常见问题列表</div>
             <ul>
                 <li v-for="item in listData" :key="item.id" @click="goDetail(item.id)">
                     <div>{{item.title}}</div>
@@ -9,7 +9,7 @@
                 <li class="ul-footer">联系客服 : 027-8788 8662</li>
             </ul>
         </div>
-        <div class="detail-main" v-if="state == 'detail'">
+        <div :class="{detailmain:true,isactive:state == 'detail'}">
             <div class="detail-header">
                 <div class="show-list" @click="state = 'list'">返回</div>
             </div>
@@ -85,21 +85,22 @@ export default {
     bottom:0;
     right:0;
     background:#f3f3f3;
-    display:flex;
-    flex-direction:column;
-    overflow: hidden;
     .title{
         text-align: center;
-        line-height:5rem;
+        line-height:60px;
+        height:60px;
         font-size:1.3rem;
         background: #3bc492;
         color: #fff;
         margin-bottom:10px;
     }
-    .list-main{
-        flex:1;
-        padding:10%;
+    .listmain{
+        position: absolute;
+        width:100%;
+        left:-100%;
+        transition: 1000ms;
         ul{
+            padding:10%;
             li{
                 line-height:36px;
                 font-size:0.8rem;
@@ -114,19 +115,28 @@ export default {
             }
         }
     }
-    .detail-main{
-        flex:1;
+    .listmain.isactive{
+        left:0;
+    }
+    .detailmain{
+        position: absolute;
+        min-width:100%;
+        left:100%;
+        transition: 1000ms;
         .detail-header{
             height:60px;
             background:#3bc492;
             .show-list{
                 width:20%;
                 height:60px;
-                text-align:center;
+                margin-left:20px;
                 line-height: 60px;
                 color:#fff;
             }
         }
+    }
+    .detailmain.isactive{
+        left:0;
     }
 }
 </style>

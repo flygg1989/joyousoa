@@ -1,7 +1,7 @@
 <template>
   	<div class="video-container">
         <div class="title">操作视频</div>
-    	<video src="static/media/OperationalVideo.mp4" controls="controls"></video>
+    	<video src="static/media/OperationalVideo.mp4" controls="controls" poster="static/media/OperationalVideo.png"></video>
   	</div>
 </template>
 

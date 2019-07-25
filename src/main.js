@@ -13,6 +13,10 @@ import VueAwesomeSwiper from 'vue-awesome-swiper';
 import 'swiper/dist/css/swiper.css';
 Vue.use(VueAwesomeSwiper);
 
+//滚动加载
+var infiniteScroll = require('vue-infinite-scroll');
+Vue.use(infiniteScroll);
+
 Vue.use(VueRouter)
 const router = new VueRouter({
 	routes
